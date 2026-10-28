@@ -1,54 +1,23 @@
-import { Injectable } from '@angular/core';
-import {
-  CanActivate, Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  CanActivateChild,
-  NavigationExtras,
-  CanLoad, Route
-} from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, CanMatchFn, Router, UrlTree } from '@angular/router';
 import { AuthService } from './auth.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
-  constructor(private authService: AuthService, private router: Router) {}
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const url: string = state.url;
-
-    return this.checkLogin(url);
+/** Redirect to /login (remembering where the user wanted to go) unless logged in. */
+function checkLogin(url: string): true | UrlTree {
+  const authService = inject(AuthService);
+  if (authService.isLoggedIn) {
+    return true;
   }
-
-  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    return this.canActivate(route, state);
-  }
-
-  canLoad(route: Route): boolean {
-    const url = `/${route.path}`;
-
-    return this.checkLogin(url);
-  }
-
-  checkLogin(url: string): boolean {
-    if (this.authService.isLoggedIn) { return true; }
-
-    // Store the attempted URL for redirecting
-    this.authService.redirectUrl = url;
-
-    // Create a dummy session id
-    const sessionId = 123456789;
-
-    // Set our navigation extras object
-    // that contains our global query params and fragment
-    const navigationExtras: NavigationExtras = {
-      queryParams: { session_id: sessionId },
-      fragment: 'anchor'
-    };
-
-    // Navigate to the login page with extras
-    this.router.navigate(['/login'], navigationExtras);
-    return false;
-  }
+  authService.redirectUrl = url;
+  return inject(Router).createUrlTree(['/login'], {
+    queryParams: { session_id: 123456789 },
+    fragment: 'anchor',
+  });
 }
+
+export const authGuard: CanActivateFn = (_route, state) =>
+  checkLogin(state.url);
+
+/** Prevents even downloading a lazy feature until the user is logged in. */
+export const authMatchGuard: CanMatchFn = (_route, segments) =>
+  checkLogin('/' + segments.map((s) => s.path).join('/'));

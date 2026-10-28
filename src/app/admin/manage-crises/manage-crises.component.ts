@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-manage-crises',
   templateUrl: './manage-crises.component.html',
-  styleUrls: ['./manage-crises.component.css']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./manage-crises.component.css'],
 })
-export class ManageCrisesComponent { }
+export class ManageCrisesComponent {}

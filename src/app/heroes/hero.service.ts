@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -11,8 +11,7 @@ import { MessageService } from '../message.service';
   providedIn: 'root',
 })
 export class HeroService {
-
-  constructor(private messageService: MessageService) { }
+  private messageService = inject(MessageService);
 
   getHeroes(): Observable<Hero[]> {
     // TODO: send the message _after_ fetching the heroes
@@ -23,8 +22,7 @@ export class HeroService {
   getHero(id: number | string) {
     return this.getHeroes().pipe(
       // (+) before `id` turns the string into a number
-      map((heroes: Hero[]) => heroes.find(hero => hero.id === +id)!)
+      map((heroes: Hero[]) => heroes.find((hero) => hero.id === +id)!),
     );
   }
 }
-

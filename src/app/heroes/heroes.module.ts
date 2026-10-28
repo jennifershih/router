@@ -11,11 +11,9 @@ import { HeroesRoutingModule } from './heroes-routing.module';
   imports: [
     CommonModule,
     FormsModule,
-    HeroesRoutingModule
-  ],
-  declarations: [
+    HeroesRoutingModule,
     HeroListComponent,
-    HeroDetailComponent
-  ]
+    HeroDetailComponent,
+  ],
 })
 export class HeroesModule {}

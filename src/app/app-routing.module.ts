@@ -4,45 +4,39 @@ import { RouterModule, Routes } from '@angular/router';
 import { ComposeMessageComponent } from './compose-message/compose-message.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
-import { AuthGuard } from './auth/auth.guard';
+import { authMatchGuard } from './auth/auth.guard';
 import { SelectivePreloadingStrategyService } from './selective-preloading-strategy.service';
-import { CrisisListComponent } from './crisis-center/crisis-list/crisis-list.component';
-import { HeroListComponent } from './heroes/hero-list/hero-list.component';
 
-const appRoutes: Routes = [
+export const appRoutes: Routes = [
   {
     path: 'compose',
     component: ComposeMessageComponent,
-    outlet: 'popup'
+    outlet: 'popup',
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    canLoad: [AuthGuard]
+    loadChildren: () =>
+      import('./admin/admin.module').then((m) => m.AdminModule),
+    canMatch: [authMatchGuard],
   },
   {
     path: 'crisis-center',
-    loadChildren: () => import('./crisis-center/crisis-center.module').then(m => m.CrisisCenterModule),
-    data: { preload: true }
+    loadChildren: () =>
+      import('./crisis-center/crisis-center.module').then(
+        (m) => m.CrisisCenterModule,
+      ),
+    data: { preload: true },
   },
-  { path: 'crisis-center', component: CrisisListComponent },
-  { path: 'heroes',        component: HeroListComponent },
-  { path: '',   redirectTo: '/superheroes', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '', redirectTo: '/superheroes', pathMatch: 'full' },
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(
-      appRoutes,
-      {
-        enableTracing: true, // <-- debugging purposes only
-        preloadingStrategy: SelectivePreloadingStrategyService,
-      }
-    )
+    RouterModule.forRoot(appRoutes, {
+      preloadingStrategy: SelectivePreloadingStrategyService,
+    }),
   ],
-  exports: [
-    RouterModule
-  ]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

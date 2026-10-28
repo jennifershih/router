@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-manage-hereos',
   templateUrl: './manage-heroes.component.html',
-  styleUrls: ['./manage-heroes.component.css']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./manage-heroes.component.css'],
 })
-export class ManageHeroesComponent { }
+export class ManageHeroesComponent {}

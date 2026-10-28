@@ -11,13 +11,11 @@ import { AdminRoutingModule } from './admin-routing.module';
 @NgModule({
   imports: [
     CommonModule,
-    AdminRoutingModule
-  ],
-  declarations: [
+    AdminRoutingModule,
     AdminComponent,
     AdminDashboardComponent,
     ManageCrisesComponent,
-    ManageHeroesComponent
-  ]
+    ManageHeroesComponent,
+  ],
 })
 export class AdminModule {}

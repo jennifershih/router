@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-crisis-center',
   templateUrl: './crisis-center.component.html',
-  styleUrls: ['./crisis-center.component.css']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./crisis-center.component.css'],
+  imports: [RouterOutlet],
 })
-export class CrisisCenterComponent { }
+export class CrisisCenterComponent {}

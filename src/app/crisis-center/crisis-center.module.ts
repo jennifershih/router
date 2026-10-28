@@ -13,13 +13,11 @@ import { CrisisCenterRoutingModule } from './crisis-center-routing.module';
   imports: [
     CommonModule,
     FormsModule,
-    CrisisCenterRoutingModule
-  ],
-  declarations: [
+    CrisisCenterRoutingModule,
     CrisisCenterComponent,
     CrisisListComponent,
     CrisisCenterHomeComponent,
-    CrisisDetailComponent
-  ]
+    CrisisDetailComponent,
+  ],
 })
 export class CrisisCenterModule {}

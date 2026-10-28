@@ -1,17 +1,21 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-compose-message',
   templateUrl: './compose-message.component.html',
-  styleUrls: ['./compose-message.component.css']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./compose-message.component.css'],
+  imports: [FormsModule],
 })
 export class ComposeMessageComponent {
+  private router = inject(Router);
+
   details = '';
   message = '';
   sending = false;
-
-  constructor(private router: Router) {}
 
   send() {
     this.sending = true;
@@ -30,6 +34,6 @@ export class ComposeMessageComponent {
   closePopup() {
     // Providing a `null` value to the named outlet
     // clears the contents of the named outlet
-    this.router.navigate([{ outlets: { popup: null }}]);
+    this.router.navigate([{ outlets: { popup: null } }]);
   }
 }

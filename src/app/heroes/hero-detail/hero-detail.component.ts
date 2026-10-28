@@ -1,30 +1,35 @@
 import { switchMap } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { HeroService } from '../hero.service';
 import { Hero } from '../hero';
+import { AsyncPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-hero-detail',
   templateUrl: './hero-detail.component.html',
-  styleUrls: ['./hero-detail.component.css']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./hero-detail.component.css'],
+  imports: [FormsModule, AsyncPipe],
 })
 export class HeroDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private service = inject(HeroService);
+
   hero$!: Observable<Hero>;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private service: HeroService
-  ) {}
-
 
   ngOnInit() {
     this.hero$ = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.service.getHero(params.get('id')!))
+      switchMap((params: ParamMap) => this.service.getHero(params.get('id')!)),
     );
   }
 
